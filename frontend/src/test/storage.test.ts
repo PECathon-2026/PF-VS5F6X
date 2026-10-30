@@ -12,6 +12,8 @@ import {
   getCurrentStreak,
   getReadingGoal,
   setReadingGoal,
+  isArticleReadToday,
+  getTodayReadUrls,
 } from '../utils/storage';
 
 describe('Local Storage Guest Persistence', () => {
@@ -82,6 +84,30 @@ describe('Local Storage Guest Persistence', () => {
       expect(updated.articlesRead).toBe(2);
       expect(updated.wordsRead).toBe(1200);
       expect(updated.minutesRead).toBe(6);
+    });
+
+    it('deduplicates articles by URL so opening/resuming the same article does not increment counts', () => {
+      const url = 'https://example.com/unique-read';
+      expect(isArticleReadToday(url)).toBe(false);
+
+      const firstResult = recordArticleRead(600, 3, url);
+      expect(firstResult).toBe(true);
+      expect(isArticleReadToday(url)).toBe(true);
+      expect(getTodayReadUrls()).toContain(url);
+
+      const statsAfterFirst = getTodayStats();
+      expect(statsAfterFirst.articlesRead).toBe(1);
+      expect(statsAfterFirst.wordsRead).toBe(600);
+      expect(statsAfterFirst.minutesRead).toBe(3);
+
+      // Simulating user re-opening, refreshing, or resuming the same article URL
+      const secondResult = recordArticleRead(600, 3, url);
+      expect(secondResult).toBe(false);
+
+      const statsAfterSecond = getTodayStats();
+      expect(statsAfterSecond.articlesRead).toBe(1); // Still 1, NOT 2
+      expect(statsAfterSecond.wordsRead).toBe(600);  // Unchanged
+      expect(statsAfterSecond.minutesRead).toBe(3); // Unchanged
     });
 
     it('calculates current streak', () => {

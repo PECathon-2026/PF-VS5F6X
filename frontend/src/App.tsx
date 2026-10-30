@@ -89,7 +89,7 @@ const MainAppContent: React.FC = () => {
       if (!recordedUrlsRef.current.has(url)) {
         recordedUrlsRef.current.add(url);
         // Use 0 rather than fabricated defaults when values are genuinely unknown.
-        recordArticleRead(wordCount || 0, readingTimeMinutes || 0);
+        recordArticleRead(wordCount || 0, readingTimeMinutes || 0, url);
       }
     },
     []

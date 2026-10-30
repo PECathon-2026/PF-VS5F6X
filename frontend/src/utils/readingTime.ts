@@ -9,7 +9,7 @@ export function calculateReadingTime(textOrHtml: string): {
   // Strip HTML tags for word counting
   const plainText = textOrHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   if (!plainText) {
-    return { wordCount: 0, readingTimeMinutes: 1 };
+    return { wordCount: 0, readingTimeMinutes: 0 };
   }
 
   // Match actual word tokens (alphanumeric and hyphens/apostrophes)

@@ -105,6 +105,19 @@ describe('ReaderCanvas — onArticleRead deduplication contract', () => {
     expect(spy).toHaveBeenNthCalledWith(2, articleA.url, articleA.wordCount, articleA.readingTimeMinutes);
   });
 
+  it('does not fire onArticleRead when article has empty content (failed or empty extraction)', () => {
+    const spy = vi.fn();
+    const emptyArticle: Article = {
+      url: 'https://example.com/empty-read',
+      title: 'Empty Article',
+      content: '',
+      wordCount: 0,
+      readingTimeMinutes: 0,
+    };
+    render(<ReaderCanvas article={emptyArticle} onArticleRead={spy} />);
+    expect(spy).not.toHaveBeenCalled();
+  });
+
   it('fires onArticleRead with 0/0 when wordCount and readingTimeMinutes are absent (no fictional fallbacks)', () => {
     const spy = vi.fn();
     const articleNoMeta: Article = {

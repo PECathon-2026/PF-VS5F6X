@@ -20,6 +20,7 @@ const KEYS = {
   streakAnchor: 'swr_streak_anchor_v1',
   onboardingCompleted: 'swr_onboarding_completed_v1',
   userProfile: 'swr_user_profile_v1',
+  readUrlsToday: 'swr_read_urls_today_v1',
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -170,7 +171,28 @@ export function getTodayStats(): DailyReadingStats {
   return all.find((s) => s.date === today) || { date: today, articlesRead: 0, minutesRead: 0, wordsRead: 0 };
 }
 
-export function recordArticleRead(wordCount: number, minutesRead: number): void {
+export function getTodayReadUrls(): string[] {
+  const data = read<{ date: string; urls: string[] }>(KEYS.readUrlsToday, { date: todayKey(), urls: [] });
+  if (data.date !== todayKey()) {
+    return [];
+  }
+  return data.urls || [];
+}
+
+export function isArticleReadToday(url: string): boolean {
+  return getTodayReadUrls().includes(url);
+}
+
+export function recordArticleRead(wordCount: number, minutesRead: number, url?: string): boolean {
+  if (url) {
+    const readUrls = getTodayReadUrls();
+    if (readUrls.includes(url)) {
+      return false; // Already recorded this article URL today — deduplicate
+    }
+    const updatedUrls = [...readUrls, url];
+    write(KEYS.readUrlsToday, { date: todayKey(), urls: updatedUrls });
+  }
+
   const all = getDailyStats();
   const today = todayKey();
   const idx = all.findIndex((s) => s.date === today);
@@ -184,6 +206,7 @@ export function recordArticleRead(wordCount: number, minutesRead: number): void 
   }
   write(KEYS.stats, all.slice(0, 365));
   write(KEYS.streakAnchor, today);
+  return true;
 }
 
 export function getCurrentStreak(): number {

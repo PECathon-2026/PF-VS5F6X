@@ -27,8 +27,11 @@ export const ReaderCanvas: React.FC<ReaderCanvasProps> = ({ article, onNotify, o
       siteName: article.siteName,
     });
     // Delegate stat recording to the parent so deduplication lives in one place.
+    // Only record verified reading sessions when textual content exists.
     // Use 0 rather than fictional fallbacks when real values are unavailable.
-    onArticleRead?.(article.url, article.wordCount ?? 0, article.readingTimeMinutes ?? 0);
+    if (article.content && article.content.trim()) {
+      onArticleRead?.(article.url, article.wordCount ?? 0, article.readingTimeMinutes ?? 0);
+    }
   }, [article.url]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleBookmark = () => {
