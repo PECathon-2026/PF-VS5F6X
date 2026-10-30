@@ -1,0 +1,545 @@
+/* ==========================================================================
+   SmallWebReader — Design Tokens & Core Theme Styles
+   Default Visual Direction: Editorial Zen
+   ========================================================================== */
+
+:root {
+  /* Editorial Zen Palette (Default) */
+  --bg-page: #FAF8F5;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F4EFEB;
+  --bg-surface-muted: #EFE9E2;
+  --text-primary: #1F1E1D;
+  --text-secondary: #54514C;
+  --text-muted: #87827B;
+  --border-subtle: #E8E2D9;
+  --border-hover: #D4CCBF;
+  --border-focus: #1F1E1D;
+  --accent: #2C2A28;
+  --accent-surface: #F0ECE4;
+  --accent-text: #FFFFFF;
+  --tag-bg: #EAE3D6;
+  --tag-text: #45423E;
+  --code-bg: #EFE9E1;
+  --code-border: #E0D7CC;
+  --quote-border: #C8BFB0;
+
+  /* Typography Scales */
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --font-display: 'Cinzel', 'Lora', serif;
+
+  /* Reader Dynamic Settings (Controlled via UI State) */
+  --reader-font-family: var(--font-serif);
+  --reader-font-size: 18px;
+  --reader-line-height: 1.75;
+  --reader-paragraph-spacing: 1.4em;
+  --reader-max-width: 720px;
+
+  /* Radii & Transitions */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-sm: 0 1px 3px rgba(31, 30, 29, 0.04);
+  --shadow-md: 0 4px 12px rgba(31, 30, 29, 0.06);
+  --shadow-lg: 0 10px 28px rgba(31, 30, 29, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   8 Canonical Theme Presets
+   -------------------------------------------------------------------------- */
+
+/* 1. Japanese Minimal (Wabi-sabi earth & bamboo stone) */
+[data-theme="japanese-minimal"] {
+  --bg-page: #F5F3EF;
+  --bg-surface: #FCFAF7;
+  --bg-surface-elevated: #EDE9E1;
+  --bg-surface-muted: #E4DFD5;
+  --text-primary: #232220;
+  --text-secondary: #58554F;
+  --text-muted: #8E8980;
+  --border-subtle: #E2DDD3;
+  --border-hover: #CDC6B8;
+  --border-focus: #3D3934;
+  --accent: #3F3C36;
+  --accent-surface: #E8E3D8;
+  --accent-text: #FCFAF7;
+  --tag-bg: #E5DFD4;
+  --tag-text: #48443D;
+  --code-bg: #EBE5DB;
+  --code-border: #DCD4C6;
+  --quote-border: #BDB4A3;
+}
+
+/* 2. Academia (Parchment & Deep Ink) */
+[data-theme="academia"] {
+  --bg-page: #FBF7ED;
+  --bg-surface: #FFFDF8;
+  --bg-surface-elevated: #F2ECDC;
+  --bg-surface-muted: #E7DFCA;
+  --text-primary: #1C1917;
+  --text-secondary: #4A443E;
+  --text-muted: #7E756B;
+  --border-subtle: #E5DCC9;
+  --border-hover: #D0C3A8;
+  --border-focus: #1C1917;
+  --accent: #2B2621;
+  --accent-surface: #EAE1CD;
+  --accent-text: #FFFDF8;
+  --tag-bg: #E8DFC9;
+  --tag-text: #3D362F;
+  --code-bg: #EFE7D2;
+  --code-border: #DFD4BA;
+  --quote-border: #C4B495;
+}
+
+/* 3. Dark Mono (Focused charcoal & deep slate night reading) */
+[data-theme="dark-mono"] {
+  --bg-page: #131416;
+  --bg-surface: #1B1D21;
+  --bg-surface-elevated: #24272C;
+  --bg-surface-muted: #2E3239;
+  --text-primary: #EAEBEE;
+  --text-secondary: #A6ABB5;
+  --text-muted: #6E7480;
+  --border-subtle: #2C3038;
+  --border-hover: #404652;
+  --border-focus: #EAEBEE;
+  --accent: #EAEBEE;
+  --accent-surface: #2E3239;
+  --accent-text: #131416;
+  --tag-bg: #272A30;
+  --tag-text: #CED2DA;
+  --code-bg: #1B1D21;
+  --code-border: #333842;
+  --quote-border: #4D5360;
+}
+
+/* 4. Nature (Sage & Forest Earth) */
+[data-theme="nature"] {
+  --bg-page: #F2F5F0;
+  --bg-surface: #FAFCF9;
+  --bg-surface-elevated: #E5EBE2;
+  --bg-surface-muted: #D8E0D4;
+  --text-primary: #1C271E;
+  --text-secondary: #425446;
+  --text-muted: #6C7F71;
+  --border-subtle: #D4DDD1;
+  --border-hover: #BAC6B6;
+  --border-focus: #2A4430;
+  --accent: #2D4A33;
+  --accent-surface: #E0EADE;
+  --accent-text: #FAFCF9;
+  --tag-bg: #DBE4D8;
+  --tag-text: #26382A;
+  --code-bg: #E3EBE0;
+  --code-border: #CBD6C7;
+  --quote-border: #8FA693;
+}
+
+/* 5. Minimalist (Pure high-contrast monochrome Swiss design) */
+[data-theme="minimalist"] {
+  --bg-page: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #F6F6F6;
+  --bg-surface-muted: #EEEEEE;
+  --text-primary: #000000;
+  --text-secondary: #444444;
+  --text-muted: #888888;
+  --border-subtle: #E0E0E0;
+  --border-hover: #999999;
+  --border-focus: #000000;
+  --accent: #000000;
+  --accent-surface: #F0F0F0;
+  --accent-text: #FFFFFF;
+  --tag-bg: #F0F0F0;
+  --tag-text: #000000;
+  --code-bg: #F8F8F8;
+  --code-border: #DDDDDD;
+  --quote-border: #000000;
+}
+
+/* 6. Anime (Clean cel-shaded lines with vibrant indigo/cherry accents) */
+[data-theme="anime"] {
+  --bg-page: #F7F7FD;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #EFEFFC;
+  --bg-surface-muted: #E2E3F9;
+  --text-primary: #1B1E36;
+  --text-secondary: #4D5275;
+  --text-muted: #848AB0;
+  --border-subtle: #E0E2F5;
+  --border-hover: #C5C9EB;
+  --border-focus: #5046E5;
+  --accent: #4F46E5;
+  --accent-surface: #EEF0FF;
+  --accent-text: #FFFFFF;
+  --tag-bg: #E5E8FD;
+  --tag-text: #3730A3;
+  --code-bg: #F0F2FD;
+  --code-border: #D5D9F6;
+  --quote-border: #6366F1;
+}
+
+/* 7. Cyberpunk (Night terminal with electric cyan and neon glow accents) */
+[data-theme="cyberpunk"] {
+  --bg-page: #0C0E14;
+  --bg-surface: #141722;
+  --bg-surface-elevated: #1B2030;
+  --bg-surface-muted: #242A3E;
+  --text-primary: #F0F6FC;
+  --text-secondary: #9BA7C0;
+  --text-muted: #5E6984;
+  --border-subtle: #252D42;
+  --border-hover: #00F0FF;
+  --border-focus: #00F0FF;
+  --accent: #00F0FF;
+  --accent-surface: #16293A;
+  --accent-text: #0C0E14;
+  --tag-bg: #112638;
+  --tag-text: #38BDF8;
+  --code-bg: #090B10;
+  --code-border: #1E283D;
+  --quote-border: #00F0FF;
+}
+
+/* 8. Experimental (Warm terracotta brutalist editorial aesthetic) */
+[data-theme="experimental"] {
+  --bg-page: #F7F1EB;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #EFE4D8;
+  --bg-surface-muted: #E4D5C5;
+  --text-primary: #2B1D14;
+  --text-secondary: #5C4638;
+  --text-muted: #8E7361;
+  --border-subtle: #DFCFC1;
+  --border-hover: #B89981;
+  --border-focus: #B85028;
+  --accent: #B85028;
+  --accent-surface: #F8EDE5;
+  --accent-text: #FFFFFF;
+  --tag-bg: #F1DFD1;
+  --tag-text: #7C2D12;
+  --code-bg: #EFE1D3;
+  --code-border: #DEC8B4;
+  --quote-border: #B85028;
+}
+
+/* --------------------------------------------------------------------------
+   Global Resets & Base
+   -------------------------------------------------------------------------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100%;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+/* Reduced Motion Safety (Mandatory) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity var(--transition-fast);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Layout Structure
+   -------------------------------------------------------------------------- */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Focus Mode: hides extraneous header/footer cues */
+body.focus-mode-active .app-header-nav,
+body.focus-mode-active .app-footer {
+  opacity: 0.15;
+  transition: opacity var(--transition-normal);
+}
+
+body.focus-mode-active .app-header-nav:hover,
+body.focus-mode-active .app-footer:hover {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Reader Typography Engine
+   -------------------------------------------------------------------------- */
+
+.reader-canvas {
+  width: 100%;
+  max-width: var(--reader-max-width);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+
+.reader-prose {
+  font-family: var(--reader-font-family);
+  font-size: var(--reader-font-size);
+  line-height: var(--reader-line-height);
+  color: var(--text-primary);
+}
+
+.reader-prose > * + * {
+  margin-top: var(--reader-paragraph-spacing);
+}
+
+.reader-prose h1,
+.reader-prose h2,
+.reader-prose h3,
+.reader-prose h4 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+}
+
+.reader-prose h1 { font-size: 1.8em; }
+.reader-prose h2 { font-size: 1.4em; }
+.reader-prose h3 { font-size: 1.2em; }
+
+.reader-prose p.lead {
+  font-size: 1.15em;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.reader-prose blockquote {
+  border-left: 3px solid var(--quote-border);
+  padding: 0.6em 0 0.6em 1.2em;
+  margin: 1.8em 0;
+  font-style: italic;
+  color: var(--text-secondary);
+  background-color: var(--bg-surface-elevated);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.reader-prose ul,
+.reader-prose ol {
+  padding-left: 1.5em;
+  margin: 1.2em 0;
+}
+
+.reader-prose li {
+  margin-bottom: 0.5em;
+}
+
+.reader-prose pre {
+  background-color: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  line-height: 1.5;
+  margin: 1.6em 0;
+}
+
+.reader-prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+.reader-prose pre code {
+  background: none;
+  padding: 0;
+}
+
+.reader-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 2em auto;
+  display: block;
+}
+
+.reader-prose hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 2.5em 0;
+}
+
+/* Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* --------------------------------------------------------------------------
+   Theme Engine Animation Keyframes
+   Strictly GPU-accelerated: transforms and opacity only
+   -------------------------------------------------------------------------- */
+
+@keyframes sakuraDrift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(24px, 50vh, 0) rotate(160deg);
+  }
+  100% {
+    transform: translate3d(-18px, 105vh, 0) rotate(360deg);
+  }
+}
+
+@keyframes leafFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  40% {
+    transform: translate3d(35px, 45vh, 0) rotate(65deg);
+  }
+  75% {
+    transform: translate3d(-20px, 80vh, 0) rotate(-40deg);
+  }
+  100% {
+    transform: translate3d(15px, 105vh, 0) rotate(120deg);
+  }
+}
+
+@keyframes dustFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate3d(16px, -24px, 0) scale(1.2);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(-12px, -45px, 0) scale(0.95);
+    opacity: 0.25;
+  }
+}
+
+@keyframes starFloat {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.8) rotate(0deg);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate3d(14px, -40vh, 0) scale(1.15) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(-8px, -85vh, 0) scale(0.8) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes orbPulse {
+  0% {
+    transform: scale(0.95) translate3d(0, 0, 0);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1.1) translate3d(15px, -15px, 0);
+    opacity: 0.45;
+  }
+}
+
+@keyframes geoRotate {
+  0% {
+    transform: rotate(0deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(180deg) translate3d(12px, -12px, 0);
+  }
+  100% {
+    transform: rotate(360deg) translate3d(0, 0, 0);
+  }
+}
+
+/* Smooth theme transition for page elements */
+body, .app-container, .main-content, .card-theme-aware, header, footer {
+  transition: background-color var(--transition-normal), color var(--transition-normal), border-color var(--transition-normal);
+}
+
+/* Responsive navigation visibility */
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 5rem !important;
+  }
+}
+
+/* Reduced motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .theme-bg-canvas-container span {
+    display: none !important;
+  }
+}
