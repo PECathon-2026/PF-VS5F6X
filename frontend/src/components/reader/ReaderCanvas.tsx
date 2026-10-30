@@ -2,26 +2,34 @@ import React, { useMemo, useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { Article } from '../../types/article';
 import { ArticleHeader } from './ArticleHeader';
-import { isBookmarked, addBookmark, removeBookmark, recordArticleRead, addHistoryEntry } from '../../utils/storage';
+import { isBookmarked, addBookmark, removeBookmark, addHistoryEntry } from '../../utils/storage';
 
 export interface ReaderCanvasProps {
   article: Article;
   onNotify?: (msg: string, type?: 'success' | 'error' | 'info') => void;
+  /**
+   * Called once per unique article URL per session to record reading stats.
+   * The parent is responsible for deduplication — this component simply fires
+   * the callback whenever article.url changes.
+   */
+  onArticleRead?: (url: string, wordCount: number, readingTimeMinutes: number) => void;
 }
 
-export const ReaderCanvas: React.FC<ReaderCanvasProps> = ({ article, onNotify }) => {
+export const ReaderCanvas: React.FC<ReaderCanvasProps> = ({ article, onNotify, onArticleRead }) => {
   const [bookmarked, setBookmarked] = useState(false);
 
   useEffect(() => {
     setBookmarked(isBookmarked(article.url));
-    // Record in history and calculate stats
+    // Record in history (addHistoryEntry already deduplicates by URL)
     addHistoryEntry({
       url: article.url,
       title: article.title,
       siteName: article.siteName,
     });
-    recordArticleRead(article.wordCount || 300, article.readingTimeMinutes || 2);
-  }, [article.url]);
+    // Delegate stat recording to the parent so deduplication lives in one place.
+    // Use 0 rather than fictional fallbacks when real values are unavailable.
+    onArticleRead?.(article.url, article.wordCount ?? 0, article.readingTimeMinutes ?? 0);
+  }, [article.url]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleBookmark = () => {
     if (bookmarked) {

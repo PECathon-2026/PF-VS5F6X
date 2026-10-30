@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ThemeProvider, useTheme } from './components/theme/ThemeProvider';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
@@ -31,6 +31,7 @@ import {
   isOnboardingCompleted,
   setOnboardingCompleted,
   getUserProfile,
+  recordArticleRead,
 } from './utils/storage';
 
 const MainAppContent: React.FC = () => {
@@ -69,6 +70,30 @@ const MainAppContent: React.FC = () => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 4000);
   }, []);
+
+  /**
+   * Tracks which article URLs have already been counted in this browser session.
+   * A Set<string> in a ref resets when the page is refreshed (correct: a new
+   * session) but persists across view transitions and component remounts (also
+   * correct: we should not double-count the same article in one session).
+   */
+  const recordedUrlsRef = useRef<Set<string>>(new Set());
+
+  /**
+   * Called by ReaderCanvas each time article.url changes.
+   * Deduplicates: the first open of a URL records stats; subsequent re-opens
+   * (including retries, back-navigation, or React remounts) are ignored.
+   */
+  const handleArticleRead = useCallback(
+    (url: string, wordCount: number, readingTimeMinutes: number) => {
+      if (!recordedUrlsRef.current.has(url)) {
+        recordedUrlsRef.current.add(url);
+        // Use 0 rather than fabricated defaults when values are genuinely unknown.
+        recordArticleRead(wordCount || 0, readingTimeMinutes || 0);
+      }
+    },
+    []
+  );
 
   const dismissToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -307,7 +332,7 @@ const MainAppContent: React.FC = () => {
                 </button>
               </div>
 
-              <ReaderCanvas article={article} onNotify={addToast} />
+              <ReaderCanvas article={article} onNotify={addToast} onArticleRead={handleArticleRead} />
             </div>
           ) : (
             <LandingView
